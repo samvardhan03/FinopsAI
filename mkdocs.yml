@@ -1,0 +1,61 @@
+site_name: FinOps AI
+site_description: Enterprise-Grade Multi-Cloud Cost Optimization Platform
+site_author: FinOps AI Team
+site_url: https://example.com/finops-ai/
+
+repo_name: FinOps AI
+repo_url: https://github.com/yourusername/finops-ai
+
+theme:
+  name: material
+  palette:
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: purple
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: purple
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - toc.follow
+    - content.code.copy
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+
+nav:
+  - Home: index.md
+  - User Guide:
+    - Installation: user-guide/installation.md
+    - Quickstart: user-guide/quickstart.md
+    - Configuration: user-guide/configuration.md
+    - CLI Reference: user-guide/cli.md
+  - Providers:
+    - Azure: providers/azure.md
+    - AWS: providers/aws.md
+    - GCP: providers/gcp.md
+  - AI Engine:
+    - Anomaly Detection: ai/anomaly-detection.md
+    - Forecasting: ai/forecasting.md
+    - Recommendations: ai/recommendations.md
+  - Developer Guide:
+    - Contributing: developer/contributing.md
+    - Architecture: developer/architecture.md
+    - API Reference: developer/api.md

@@ -1,0 +1,14 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "python",
+    "SUBSCRIPTION_ID": "",
+    "MANAGED_IDENTITY_CLIENT_ID": "",
+    "ENABLE_DELETION": "false",
+    "DRY_RUN": "true",
+    "LOG_LEVEL": "INFO",
+    "STORAGE_CONNECTION_STRING": "",
+    "STORAGE_CONTAINER_NAME": "snapshot-reports"
+  }
+}
