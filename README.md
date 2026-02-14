@@ -22,6 +22,7 @@
 > **Stop paying for cloud resources nobody uses.** FinOps AI scans your multi-cloud
 > infrastructure, detects orphaned resources, estimates waste, and provides AI-powered
 > recommendations — saving enterprises an average of **30% on cloud spend**.
+> check out:  https://pypi.org/project/finops-ai/0.1.2/
 
 ## Features
 
