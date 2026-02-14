@@ -1,4 +1,4 @@
-# FinOps AI 🤖☁️
+# FinOps AI
 
 <p align="center">
   <strong>Enterprise-Grade Multi-Cloud Cost Optimization Platform</strong>
@@ -23,7 +23,7 @@
 > infrastructure, detects orphaned resources, estimates waste, and provides AI-powered
 > recommendations — saving enterprises an average of **30% on cloud spend**.
 
-## 🚀 Features
+## Features
 
 | Feature | Description |
 |---------|-------------|
@@ -93,7 +93,7 @@ for resource in result.resources:
     print(f"  {resource.name}: ${resource.estimated_monthly_cost:.2f}/mo ({resource.age_days} days old)")
 ```
 
-## ☁️ Providers
+## Providers
 
 ### Azure (7 Resource Types)
 - **Snapshots** — Orphaned managed snapshots (source disk deleted)
@@ -115,7 +115,7 @@ for resource in result.resources:
 - **Network** — Reserved (unused) static IPs (regional + global)
 - **Storage** — Empty Cloud Storage buckets
 
-## 🧠 AI Engine
+## AI Engine
 
 ```python
 from finops_ai.ml.anomaly_detector import AnomalyDetector
@@ -136,7 +136,7 @@ report = recommender.analyze(resources)
 print(f"Total savings: ${report.total_annual_savings:,.2f}/year")
 ```
 
-## ⚙️ Configuration
+## Configuration
 
 Generate a config file with `finops-ai init`, then customize:
 
@@ -173,7 +173,7 @@ ml:
   cost_forecasting: true
 ```
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 src/finops_ai/
@@ -203,7 +203,7 @@ src/finops_ai/
     └── cost_calculator.py    # Cross-cloud pricing
 ```
 
-## 🧪 Testing
+## Testing
 
 ```bash
 # Run tests
@@ -213,7 +213,7 @@ pytest tests/ -v
 pytest tests/ --cov=finops_ai --cov-report=html
 ```
 
-## 📋 Migrating from TerraSnap-Govern
+## Migrating from TerraSnap-Govern
 
 The original TerraSnap-Govern code has been preserved in `legacy/`. To migrate:
 
@@ -225,7 +225,7 @@ python scripts/azure_snapshot_cleanup.py --subscription-id $SUB_ID
 finops-ai scan --provider azure --resource-type snapshot -s $SUB_ID
 ```
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feature/my-feature`
@@ -235,12 +235,12 @@ finops-ai scan --provider azure --resource-type snapshot -s $SUB_ID
 6. Run tests: `pytest tests/ -v`
 7. Submit a pull request
 
-## 📄 License
+## License
 
-MIT License — see [LICENSE](LICENSE) for details.
+ApacheLicense — see [LICENSE](LICENSE) for details.
 
 ---
 
 <p align="center">
-  Built with ❤️ for FinOps practitioners everywhere
+  Built By Samvardhan Singh for FinOps practitioners everywhere
 </p>

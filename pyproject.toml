@@ -1,16 +1,16 @@
 [build-system]
-requires = ["setuptools>=68.0", "setuptools-scm>=8.0"]
+requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "finops-ai"
-dynamic = ["version"]
+version = "0.1.2"
 description = "AI-powered multi-cloud cost optimization for humans"
 readme = "README.md"
-license = {text = "MIT"}
+license = {text = "Apache-2.0"}
 requires-python = ">=3.9"
 authors = [
-    {name = "FinOps AI Contributors"},
+    {name = "Samvardhan Singh"},
 ]
 keywords = ["finops", "cloud", "cost-optimization", "azure", "aws", "gcp", "ai", "ml"]
 classifiers = [
@@ -18,7 +18,7 @@ classifiers = [
     "Environment :: Console",
     "Intended Audience :: Developers",
     "Intended Audience :: System Administrators",
-    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.9",
@@ -83,19 +83,16 @@ dev = [
 finops-ai = "finops_ai.cli:cli"
 
 [project.urls]
-Homepage = "https://github.com/finops-ai/finops-ai"
-Documentation = "https://finops-ai.readthedocs.io"
-Repository = "https://github.com/finops-ai/finops-ai"
-Issues = "https://github.com/finops-ai/finops-ai/issues"
+Homepage = "https://github.com/samvardhan03/FinopsAI"
+Documentation = "https://github.com/samvardhan03/FinopsAI#readme"
+Repository = "https://github.com/samvardhan03/FinopsAI"
+Issues = "https://github.com/samvardhan03/FinopsAI/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.setuptools.package-dir]
 "" = "src"
-
-[tool.setuptools_scm]
-fallback_version = "0.1.0"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
