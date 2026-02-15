@@ -16,7 +16,6 @@
 ---
 
 ![Python](https://img.shields.io/badge/Python-3.9%2B-blue)
-![License](https://img.shields.io/badge/License-MIT-green)
 ![Multi-Cloud](https://img.shields.io/badge/Multi--Cloud-Azure%20%7C%20AWS%20%7C%20GCP-orange)
 
 > **Stop paying for cloud resources nobody uses.** FinOps AI scans your multi-cloud
