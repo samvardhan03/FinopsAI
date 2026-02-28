@@ -36,7 +36,7 @@
 | **Rich Reports** | HTML (dark theme), JSON, CSV, and Slack notifications |
 | **Beautiful CLI** | Click + Rich with color-coded output and progress bars |
 
-## ⚡ Quickstart
+## Quickstart
 
 ### Install
 
