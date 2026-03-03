@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FinOps AI — Multi-Cloud Cost Optimization Platform</title>
+<meta name="description" content="Enterprise-grade AI-powered multi-cloud cost optimization. Detect orphaned resources, forecast costs, and save 30% on cloud spend across Azure, AWS, and GCP.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-primary:#0a0a1a;--bg-secondary:#0f0f2e;--bg-card:rgba(255,255,255,0.04);
+  --text-primary:#e8e8f0;--text-secondary:#9090b0;--text-muted:#606080;
+  --accent-1:#6366f1;--accent-2:#8b5cf6;--accent-3:#a855f7;
+  --accent-cyan:#22d3ee;--accent-emerald:#34d399;--accent-amber:#fbbf24;
+  --border:rgba(255,255,255,0.06);--glow:rgba(99,102,241,0.15);
+  --radius:16px;--radius-sm:10px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg-primary);color:var(--text-primary);line-height:1.6;overflow-x:hidden}
+a{color:var(--accent-1);text-decoration:none;transition:color .2s}
+a:hover{color:var(--accent-cyan)}
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 0;backdrop-filter:blur(20px);background:rgba(10,10,26,0.8);border-bottom:1px solid var(--border);transition:all .3s}
+nav .container{display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-size:1.3rem;font-weight:800;background:linear-gradient(135deg,var(--accent-1),var(--accent-cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-links{display:flex;gap:32px;align-items:center}
+.nav-links a{color:var(--text-secondary);font-size:.9rem;font-weight:500}
+.nav-links a:hover{color:var(--text-primary)}
+.nav-cta{background:linear-gradient(135deg,var(--accent-1),var(--accent-2));color:#fff!important;padding:8px 20px;border-radius:8px;font-weight:600;-webkit-text-fill-color:#fff}
+.nav-cta:hover{opacity:.9;transform:translateY(-1px)}
+
+/* HERO */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;padding:120px 0 80px;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(99,102,241,0.15),transparent 60%),radial-gradient(ellipse at 70% 80%,rgba(139,92,246,0.1),transparent 60%),radial-gradient(ellipse at 50% 50%,rgba(34,211,238,0.05),transparent 70%)}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;opacity:.3}
+.hero-content{position:relative;text-align:center;max-width:800px;margin:0 auto}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:999px;font-size:.8rem;color:var(--accent-cyan);font-weight:500;margin-bottom:24px;backdrop-filter:blur(10px)}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--accent-emerald);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-size:clamp(2.5rem,6vw,4.5rem);font-weight:900;line-height:1.1;margin-bottom:20px;background:linear-gradient(135deg,#fff 0%,var(--accent-1) 50%,var(--accent-cyan) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:1.2rem;color:var(--text-secondary);max-width:600px;margin:0 auto 36px;line-height:1.7}
+.hero-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:10px;font-weight:600;font-size:.95rem;transition:all .25s;cursor:pointer;border:none}
+.btn-primary{background:linear-gradient(135deg,var(--accent-1),var(--accent-2));color:#fff;box-shadow:0 4px 20px rgba(99,102,241,0.3)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(99,102,241,0.4);color:#fff}
+.btn-secondary{background:var(--bg-card);color:var(--text-primary);border:1px solid var(--border);backdrop-filter:blur(10px)}
+.btn-secondary:hover{border-color:var(--accent-1);background:rgba(99,102,241,0.08);color:var(--text-primary)}
+.install-cmd{display:inline-flex;align-items:center;gap:12px;margin-top:24px;padding:12px 24px;background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent-cyan);cursor:pointer;transition:border-color .2s}
+.install-cmd:hover{border-color:var(--accent-1)}
+.install-cmd .prefix{color:var(--text-muted)}
+
+/* STATS */
+.stats{padding:40px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:rgba(0,0,0,0.2)}
+.stats .container{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center}
+.stat-val{font-size:2rem;font-weight:800;background:linear-gradient(135deg,var(--accent-1),var(--accent-cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-label{font-size:.85rem;color:var(--text-muted);margin-top:4px}
+
+/* SECTIONS */
+section{padding:100px 0}
+.section-badge{display:inline-flex;padding:5px 14px;border-radius:999px;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;background:rgba(99,102,241,0.1);color:var(--accent-1);border:1px solid rgba(99,102,241,0.2)}
+.section-title{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;margin-bottom:16px;line-height:1.2}
+.section-sub{font-size:1.05rem;color:var(--text-secondary);max-width:600px;line-height:1.7}
+.section-header{text-align:center;margin-bottom:64px}
+.section-header .section-sub{margin:0 auto}
+
+/* FEATURE CARDS */
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.feature-card{padding:28px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);transition:all .3s;position:relative;overflow:hidden}
+.feature-card:hover{border-color:rgba(99,102,241,0.3);transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.3)}
+.feature-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent-1),transparent);opacity:0;transition:opacity .3s}
+.feature-card:hover::before{opacity:1}
+.feature-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:16px}
+.feature-card h3{font-size:1rem;font-weight:700;margin-bottom:8px}
+.feature-card p{font-size:.85rem;color:var(--text-secondary);line-height:1.6}
+.icon-cloud{background:rgba(99,102,241,0.12);color:var(--accent-1)}
+.icon-ai{background:rgba(168,85,247,0.12);color:var(--accent-3)}
+.icon-shield{background:rgba(52,211,153,0.12);color:var(--accent-emerald)}
+.icon-chart{background:rgba(34,211,238,0.12);color:var(--accent-cyan)}
+.icon-code{background:rgba(251,191,36,0.12);color:var(--accent-amber)}
+.icon-graph{background:rgba(244,114,182,0.12);color:#f472b6}
+.icon-report{background:rgba(96,165,250,0.12);color:#60a5fa}
+.icon-cli{background:rgba(74,222,128,0.12);color:#4ade80}
+
+/* PROVIDERS */
+.providers-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.provider-card{padding:32px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);text-align:center;transition:all .3s}
+.provider-card:hover{border-color:rgba(99,102,241,0.3);transform:translateY(-3px)}
+.provider-logo{font-size:2.5rem;margin-bottom:16px}
+.provider-card h3{font-size:1.2rem;font-weight:700;margin-bottom:4px}
+.provider-count{font-size:.85rem;color:var(--accent-cyan);font-weight:600;margin-bottom:16px}
+.provider-list{list-style:none;text-align:left}
+.provider-list li{font-size:.82rem;color:var(--text-secondary);padding:6px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.provider-list li::before{content:'✓';color:var(--accent-emerald);font-weight:700;font-size:.75rem}
+
+/* CODE DEMO */
+.code-section{background:var(--bg-secondary)}
+.code-tabs{display:flex;gap:0;margin-bottom:0;border-bottom:1px solid var(--border)}
+.code-tab{padding:10px 20px;font-size:.85rem;font-weight:500;color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s}
+.code-tab.active{color:var(--accent-1);border-bottom-color:var(--accent-1)}
+.code-block{background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:0 0 var(--radius) var(--radius);padding:24px;overflow-x:auto;display:none}
+.code-block.active{display:block}
+.code-block pre{font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.7;color:var(--text-primary)}
+.code-block .kw{color:var(--accent-3)}
+.code-block .fn{color:var(--accent-cyan)}
+.code-block .str{color:var(--accent-emerald)}
+.code-block .cm{color:var(--text-muted)}
+.code-block .op{color:var(--accent-amber)}
+.code-wrapper{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.code-info h3{font-size:1.5rem;font-weight:700;margin-bottom:12px}
+.code-info p{color:var(--text-secondary);margin-bottom:24px;line-height:1.7}
+.code-features{list-style:none}
+.code-features li{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:.9rem;color:var(--text-secondary)}
+.code-features li::before{content:'→';color:var(--accent-1);font-weight:700}
+
+/* PRICING */
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.price-card{padding:36px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);position:relative;transition:all .3s}
+.price-card:hover{transform:translateY(-4px)}
+.price-card.featured{border-color:var(--accent-1);box-shadow:0 0 60px rgba(99,102,241,0.15)}
+.price-card.featured::before{content:'MOST POPULAR';position:absolute;top:-12px;left:50%;transform:translateX(-50%);padding:4px 16px;background:linear-gradient(135deg,var(--accent-1),var(--accent-2));color:#fff;font-size:.7rem;font-weight:700;border-radius:999px;letter-spacing:1px}
+.price-name{font-size:1rem;font-weight:600;color:var(--text-secondary);margin-bottom:8px}
+.price-amount{font-size:2.5rem;font-weight:800;margin-bottom:4px}
+.price-amount span{font-size:.9rem;font-weight:400;color:var(--text-muted)}
+.price-desc{font-size:.85rem;color:var(--text-muted);margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border)}
+.price-features{list-style:none;margin-bottom:32px}
+.price-features li{font-size:.85rem;color:var(--text-secondary);padding:6px 0;display:flex;align-items:center;gap:8px}
+.price-features .check{color:var(--accent-emerald)}
+.price-features .cross{color:var(--text-muted);opacity:.4}
+.price-btn{display:block;width:100%;text-align:center;padding:12px;border-radius:10px;font-weight:600;font-size:.9rem;transition:all .2s;border:none;cursor:pointer}
+.price-btn-primary{background:linear-gradient(135deg,var(--accent-1),var(--accent-2));color:#fff}
+.price-btn-secondary{background:var(--bg-card);color:var(--text-primary);border:1px solid var(--border)}
+
+/* ARCHITECTURE */
+.arch-box{background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:var(--radius);padding:40px;font-family:'JetBrains Mono',monospace;font-size:.8rem;line-height:1.8;color:var(--text-secondary);overflow-x:auto}
+.arch-box .dir{color:var(--accent-1);font-weight:600}
+.arch-box .file{color:var(--accent-cyan)}
+.arch-box .comment{color:var(--text-muted)}
+
+/* FOOTER */
+footer{padding:60px 0 30px;border-top:1px solid var(--border);background:rgba(0,0,0,0.3)}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
+.footer-brand p{color:var(--text-muted);font-size:.85rem;margin-top:8px;line-height:1.6}
+.footer-col h4{font-size:.85rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-secondary);margin-bottom:16px}
+.footer-col a{display:block;color:var(--text-muted);font-size:.85rem;padding:4px 0;transition:color .2s}
+.footer-col a:hover{color:var(--text-primary)}
+.footer-bottom{text-align:center;padding-top:24px;border-top:1px solid var(--border);font-size:.8rem;color:var(--text-muted)}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .nav-links{display:none}
+  .stats .container{grid-template-columns:repeat(2,1fr)}
+  .providers-grid,.pricing-grid{grid-template-columns:1fr}
+  .code-wrapper{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr}
+}
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.animate{opacity:0;transform:translateY(30px);transition:all .6s cubic-bezier(.4,0,.2,1)}
+.animate.visible{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+<div class="container">
+  <a href="#" class="nav-logo">FinOps AI</a>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#providers">Providers</a>
+    <a href="#pricing">Pricing</a>
+    <a href="https://github.com/samvardhan03/FinopsAI" target="_blank">GitHub</a>
+    <a href="https://pypi.org/project/finops-ai/" target="_blank" class="nav-cta">Install →</a>
+  </div>
+</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+<div class="hero-bg"></div>
+<div class="hero-grid"></div>
+<div class="hero-content container">
+  <div class="hero-badge"><span class="dot"></span> Now available on PyPI</div>
+  <h1>Stop Paying for Cloud Resources Nobody Uses</h1>
+  <p>FinOps AI scans your multi-cloud infrastructure, detects orphaned resources, and provides AI-powered recommendations — saving enterprises an average of 30% on cloud spend.</p>
+  <div class="hero-actions">
+    <a href="https://pypi.org/project/finops-ai/" target="_blank" class="btn btn-primary">Get Started Free →</a>
+    <a href="https://github.com/samvardhan03/FinopsAI" target="_blank" class="btn btn-secondary">⭐ Star on GitHub</a>
+  </div>
+  <div class="install-cmd" onclick="navigator.clipboard.writeText('pip install finops-ai')">
+    <span class="prefix">$</span> pip install finops-ai <span style="color:var(--text-muted);margin-left:8px">📋</span>
+  </div>
+</div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+<div class="container">
+  <div><div class="stat-val">3</div><div class="stat-label">Cloud Providers</div></div>
+  <div><div class="stat-val">14+</div><div class="stat-label">Resource Types</div></div>
+  <div><div class="stat-val">30%</div><div class="stat-label">Avg Cost Savings</div></div>
+  <div><div class="stat-val">47</div><div class="stat-label">Unit Tests</div></div>
+</div>
+</div>
+
+<!-- FEATURES -->
+<section id="features">
+<div class="container">
+  <div class="section-header animate">
+    <div class="section-badge">Platform Features</div>
+    <h2 class="section-title">Everything You Need to Eliminate Cloud Waste</h2>
+    <p class="section-sub">From automated scanning to AI-powered forecasting, FinOps AI provides enterprise-grade tooling for multi-cloud cost optimization.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card animate"><div class="feature-icon icon-cloud">☁️</div><h3>Multi-Cloud Scanning</h3><p>Unified interface for Azure, AWS, and GCP. One command scans all your cloud environments simultaneously.</p></div>
+    <div class="feature-card animate"><div class="feature-icon icon-ai">🧠</div><h3>AI/ML Engine</h3><p>Isolation Forest anomaly detection identifies unusual spending patterns. Prophet forecasts future costs with confidence bands.</p></div>
+    <div class="feature-card animate"><div class="feature-icon icon-shield">🛡️</div><h3>Policy Engine</h3><p>YAML-driven governance with custom conditions, approval workflows, and automated enforcement across your organization.</p></div>
+    <div class="feature-card animate"><div class="feature-icon icon-chart">📊</div><h3>Smart Recommendations</h3><p>Prioritized, actionable insights with effort/risk ratings. Know exactly what to delete, tag, or archive first.</p></div>
+    <div class="feature-card animate"><div class="feature-icon icon-graph">🔗</div><h3>Dependency Graph</h3><p>NetworkX-powered resource dependency analysis ensures safe deletion — never accidentally remove a resource in active use.</p></div>
+    <div class="feature-card animate"><div class="feature-icon icon-report">📄</div><h3>Rich Reports</h3><p>Beautiful dark-themed HTML dashboards, JSON, CSV exports, and real-time Slack notifications via Block Kit.</p></div>
+    <div class="feature-card animate"><div class="feature-icon icon-cli">⌨️</div><h3>Beautiful CLI</h3><p>Click + Rich powered terminal with color-coded output, live progress bars, and formatted resource tables.</p></div>
+    <div class="feature-card animate"><div class="feature-icon icon-code">⚡</div><h3>Python SDK</h3><p>Full programmatic API. Import any manager, authenticate, scan, and integrate directly into your automation pipelines.</p></div>
+  </div>
+</div>
+</section>
+
+<!-- PROVIDERS -->
+<section id="providers" style="background:var(--bg-secondary)">
+<div class="container">
+  <div class="section-header animate">
+    <div class="section-badge">Cloud Providers</div>
+    <h2 class="section-title">One Platform, Every Major Cloud</h2>
+    <p class="section-sub">Deep integration with 14+ resource types across Azure, AWS, and GCP.</p>
+  </div>
+  <div class="providers-grid">
+    <div class="provider-card animate">
+      <div class="provider-logo">🔷</div>
+      <h3>Microsoft Azure</h3>
+      <div class="provider-count">7 Resource Types</div>
+      <ul class="provider-list">
+        <li>Orphaned Snapshots</li><li>Unattached Disks</li><li>Unused Public IPs</li>
+        <li>Zombie VMs</li><li>Idle Blob Containers</li><li>Empty App Service Plans</li><li>Empty Resource Groups</li>
+      </ul>
+    </div>
+    <div class="provider-card animate">
+      <div class="provider-logo">🟠</div>
+      <h3>Amazon Web Services</h3>
+      <div class="provider-count">4 Resource Types</div>
+      <ul class="provider-list">
+        <li>Stopped EC2 Instances</li><li>Unattached EBS Volumes</li><li>Orphaned EBS Snapshots</li>
+        <li>Unassociated Elastic IPs</li><li>Idle Load Balancers</li><li>Orphaned RDS Snapshots</li>
+      </ul>
+    </div>
+    <div class="provider-card animate">
+      <div class="provider-logo">🔴</div>
+      <h3>Google Cloud Platform</h3>
+      <div class="provider-count">3 Resource Types</div>
+      <ul class="provider-list">
+        <li>Orphaned Snapshots</li><li>Unattached Persistent Disks</li><li>Stopped VMs</li>
+        <li>Reserved Static IPs</li><li>Empty Storage Buckets</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- CODE DEMO -->
+<section class="code-section">
+<div class="container">
+  <div class="code-wrapper">
+    <div class="code-info animate">
+      <div class="section-badge">Developer Experience</div>
+      <h3>Built for Engineers, Loved by Finance</h3>
+      <p>Whether you prefer the CLI, Python SDK, or YAML policies — FinOps AI fits into your existing workflow seamlessly.</p>
+      <ul class="code-features">
+        <li>Scan with a single CLI command</li>
+        <li>Full Python SDK for automation</li>
+        <li>YAML-driven policy governance</li>
+        <li>Export to JSON, CSV, HTML, or Slack</li>
+      </ul>
+    </div>
+    <div class="animate">
+      <div class="code-tabs">
+        <div class="code-tab active" onclick="showTab(0)">CLI</div>
+        <div class="code-tab" onclick="showTab(1)">Python</div>
+        <div class="code-tab" onclick="showTab(2)">Config</div>
+      </div>
+      <div class="code-block active"><pre><span class="cm"># Install</span>
+<span class="fn">$</span> pip install finops-ai<span class="op">[</span>all<span class="op">]</span>
+
+<span class="cm"># Generate config</span>
+<span class="fn">$</span> finops-ai init
+
+<span class="cm"># Scan Azure resources</span>
+<span class="fn">$</span> finops-ai scan --provider azure
+
+<span class="cm"># Scan all clouds with HTML report</span>
+<span class="fn">$</span> finops-ai scan --provider all \
+    --output html --report dashboard.html
+
+<span class="cm"># Check what versions/providers are installed</span>
+<span class="fn">$</span> finops-ai version</pre></div>
+      <div class="code-block"><pre><span class="kw">from</span> finops_ai.core.auth_manager <span class="kw">import</span> <span class="fn">AuthManager</span>
+<span class="kw">from</span> finops_ai.providers.azure.snapshot_manager <span class="kw">import</span> <span class="fn">AzureSnapshotManager</span>
+
+<span class="cm"># Authenticate and scan</span>
+credential = <span class="fn">AuthManager</span>.get_azure_credential()
+manager = <span class="fn">AzureSnapshotManager</span>(credential)
+result = manager.<span class="fn">scan</span>()
+
+<span class="kw">print</span>(<span class="str">f"Found </span>{result.total_count}<span class="str"> orphaned snapshots"</span>)
+<span class="kw">print</span>(<span class="str">f"Savings: $</span>{result.total_monthly_cost:.2f}<span class="str">/mo"</span>)
+
+<span class="kw">for</span> r <span class="kw">in</span> result.resources:
+    <span class="kw">print</span>(<span class="str">f"  </span>{r.name}<span class="str">: $</span>{r.estimated_monthly_cost}<span class="str">/mo"</span>)</pre></div>
+      <div class="code-block"><pre><span class="cm"># finops-ai.yaml</span>
+<span class="fn">dry_run</span>: <span class="str">true</span>
+<span class="fn">log_level</span>: <span class="str">INFO</span>
+
+<span class="fn">providers</span>:
+  <span class="fn">azure</span>:
+    <span class="fn">enabled</span>: <span class="str">true</span>
+    <span class="fn">auth</span>:
+      <span class="fn">method</span>: <span class="str">cli</span>
+  <span class="fn">aws</span>:
+    <span class="fn">enabled</span>: <span class="str">true</span>
+    <span class="fn">regions</span>: <span class="op">[</span><span class="str">us-east-1</span>, <span class="str">us-west-2</span><span class="op">]</span>
+  <span class="fn">gcp</span>:
+    <span class="fn">enabled</span>: <span class="str">true</span>
+    <span class="fn">project_id</span>: <span class="str">my-project</span>
+
+<span class="fn">ml</span>:
+  <span class="fn">enabled</span>: <span class="str">true</span>
+  <span class="fn">anomaly_detection</span>: <span class="str">true</span>
+  <span class="fn">cost_forecasting</span>: <span class="str">true</span></pre></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+<div class="container">
+  <div class="section-header animate">
+    <div class="section-badge">Pricing</div>
+    <h2 class="section-title">Start Free, Scale As You Grow</h2>
+    <p class="section-sub">Open-source core with premium features for teams and enterprises that need more power.</p>
+  </div>
+  <div class="pricing-grid">
+    <div class="price-card animate">
+      <div class="price-name">Free / Open Source</div>
+      <div class="price-amount">$0 <span>/ forever</span></div>
+      <div class="price-desc">Perfect for individual developers and small teams.</div>
+      <ul class="price-features">
+        <li><span class="check">✓</span> Multi-cloud scanning (Azure, AWS, GCP)</li>
+        <li><span class="check">✓</span> 14+ resource types</li>
+        <li><span class="check">✓</span> CLI + Python SDK</li>
+        <li><span class="check">✓</span> JSON, CSV, HTML reports</li>
+        <li><span class="check">✓</span> Basic anomaly detection</li>
+        <li><span class="check">✓</span> Dependency graph analysis</li>
+        <li><span class="cross">✗</span> Real-time monitoring</li>
+        <li><span class="cross">✗</span> Team dashboards</li>
+      </ul>
+      <a href="https://pypi.org/project/finops-ai/" target="_blank" class="price-btn price-btn-secondary">Install Free →</a>
+    </div>
+    <div class="price-card featured animate">
+      <div class="price-name">Pro</div>
+      <div class="price-amount">$49 <span>/ month</span></div>
+      <div class="price-desc">For growing teams that want deeper insights and automation.</div>
+      <ul class="price-features">
+        <li><span class="check">✓</span> Everything in Free</li>
+        <li><span class="check">✓</span> Real-time cost monitoring</li>
+        <li><span class="check">✓</span> Slack & Teams alerts</li>
+        <li><span class="check">✓</span> Advanced Prophet forecasting</li>
+        <li><span class="check">✓</span> Custom policy templates</li>
+        <li><span class="check">✓</span> Scheduled scans (cron)</li>
+        <li><span class="check">✓</span> Team dashboard (5 seats)</li>
+        <li><span class="cross">✗</span> SSO / SAML</li>
+      </ul>
+      <a href="#" class="price-btn price-btn-primary">Coming Soon</a>
+    </div>
+    <div class="price-card animate">
+      <div class="price-name">Enterprise</div>
+      <div class="price-amount">Custom</div>
+      <div class="price-desc">For organizations with complex multi-cloud environments.</div>
+      <ul class="price-features">
+        <li><span class="check">✓</span> Everything in Pro</li>
+        <li><span class="check">✓</span> SSO / SAML authentication</li>
+        <li><span class="check">✓</span> Unlimited team seats</li>
+        <li><span class="check">✓</span> Custom integrations</li>
+        <li><span class="check">✓</span> On-premise deployment</li>
+        <li><span class="check">✓</span> SLA guarantee (99.9%)</li>
+        <li><span class="check">✓</span> Dedicated support engineer</li>
+        <li><span class="check">✓</span> Compliance reports (SOC2)</li>
+      </ul>
+      <a href="mailto:samvardhan03@gmail.com" class="price-btn price-btn-secondary">Contact Sales →</a>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section style="background:var(--bg-secondary)">
+<div class="container">
+  <div class="section-header animate">
+    <div class="section-badge">Under the Hood</div>
+    <h2 class="section-title">Clean, Modular Architecture</h2>
+    <p class="section-sub">Built with separation of concerns, abstract base classes, and the provider-registry pattern.</p>
+  </div>
+  <div class="arch-box animate"><pre><span class="dir">src/finops_ai/</span>
+├── __init__.py              <span class="comment"># Package root</span>
+├── <span class="file">cli.py</span>                   <span class="comment"># Click + Rich CLI</span>
+├── <span class="file">config.py</span>                <span class="comment"># Pydantic Settings</span>
+├── <span class="dir">core/</span>
+│   ├── <span class="file">auth_manager.py</span>      <span class="comment"># Multi-cloud auth</span>
+│   ├── <span class="file">base_manager.py</span>      <span class="comment"># Abstract base + data models</span>
+│   ├── <span class="file">graph_analyzer.py</span>    <span class="comment"># NetworkX dependency graph</span>
+│   └── <span class="file">policy_engine.py</span>     <span class="comment"># YAML governance policies</span>
+├── <span class="dir">providers/</span>
+│   ├── <span class="dir">azure/</span>               <span class="comment"># 7 Azure resource managers</span>
+│   ├── <span class="dir">aws/</span>                 <span class="comment"># 4 AWS resource managers</span>
+│   └── <span class="dir">gcp/</span>                 <span class="comment"># 3 GCP resource managers</span>
+├── <span class="dir">ml/</span>
+│   ├── <span class="file">anomaly_detector.py</span>  <span class="comment"># Isolation Forest</span>
+│   ├── <span class="file">cost_forecaster.py</span>   <span class="comment"># Prophet / linear regression</span>
+│   └── <span class="file">recommender.py</span>       <span class="comment"># Smart recommendations</span>
+├── <span class="dir">reporters/</span>
+│   ├── <span class="file">json_reporter.py</span>     <span class="comment"># JSON export</span>
+│   ├── <span class="file">csv_reporter.py</span>      <span class="comment"># CSV export</span>
+│   ├── <span class="file">html_reporter.py</span>     <span class="comment"># Dark-theme HTML dashboard</span>
+│   └── <span class="file">slack_reporter.py</span>    <span class="comment"># Slack Block Kit webhook</span>
+└── <span class="dir">utils/</span>
+    ├── <span class="file">logger.py</span>             <span class="comment"># Rich logging + audit</span>
+    └── <span class="file">cost_calculator.py</span>    <span class="comment"># Cross-cloud pricing</span></pre></div>
+</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+<div class="container">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-logo" style="font-size:1.5rem">FinOps AI</div>
+      <p>Enterprise-grade multi-cloud cost optimization platform. Built by Samvardhan Singh.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <a href="#features">Features</a>
+      <a href="#providers">Providers</a>
+      <a href="#pricing">Pricing</a>
+      <a href="https://pypi.org/project/finops-ai/" target="_blank">PyPI</a>
+    </div>
+    <div class="footer-col">
+      <h4>Developers</h4>
+      <a href="https://github.com/samvardhan03/FinopsAI" target="_blank">GitHub</a>
+      <a href="https://github.com/samvardhan03/FinopsAI#readme" target="_blank">Documentation</a>
+      <a href="https://github.com/samvardhan03/FinopsAI/issues" target="_blank">Issues</a>
+    </div>
+    <div class="footer-col">
+      <h4>Community</h4>
+      <a href="https://github.com/samvardhan03/FinopsAI" target="_blank">Contribute</a>
+      <a href="https://github.com/samvardhan03/FinopsAI/blob/main/LICENSE" target="_blank">License (Apache 2.0)</a>
+    </div>
+  </div>
+  <div class="footer-bottom">&copy; 2026 FinOps AI — Built by Samvardhan Singh</div>
+</div>
+</footer>
+
+<script>
+// Tab switching
+function showTab(i){
+  document.querySelectorAll('.code-tab').forEach((t,j)=>{t.classList.toggle('active',j===i)});
+  document.querySelectorAll('.code-block').forEach((b,j)=>{b.classList.toggle('active',j===i)});
+}
+// Scroll animations
+const obs=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})},{threshold:0.1});
+document.querySelectorAll('.animate').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "finops-ai"
-version = "0.1.2"
+version = "0.1.3"
 description = "AI-powered multi-cloud cost optimization for humans"
 readme = "README.md"
 license = {text = "Apache-2.0"}
