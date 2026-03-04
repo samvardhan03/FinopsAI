@@ -1,0 +1,1687 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinOps AI — AI-Powered Multi-Cloud Cost Optimization</title>
+    <meta name="description"
+        content="Stop paying for cloud resources nobody uses. FinOps AI scans Azure, AWS, and GCP to detect orphaned resources, forecast costs with AI, and save 30% on cloud spend.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        :root {
+            --bg: #050510;
+            --bg2: #0a0a24;
+            --bg3: #0f0f2e;
+            --card: rgba(255, 255, 255, 0.03);
+            --card-hover: rgba(255, 255, 255, 0.06);
+            --text: #e4e4f0;
+            --text2: #8888aa;
+            --text3: #555570;
+            --indigo: #6366f1;
+            --violet: #8b5cf6;
+            --purple: #a855f7;
+            --cyan: #22d3ee;
+            --emerald: #34d399;
+            --amber: #fbbf24;
+            --rose: #f43f5e;
+            --blue: #3b82f6;
+            --pink: #ec4899;
+            --border: rgba(255, 255, 255, 0.06);
+            --r: 16px;
+            --rs: 10px;
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden
+        }
+
+        a {
+            color: var(--indigo);
+            text-decoration: none;
+            transition: color .2s
+        }
+
+        a:hover {
+            color: var(--cyan)
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace
+        }
+
+        /* ─── NAV ─── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 14px 0;
+            backdrop-filter: blur(24px);
+            background: rgba(5, 5, 16, 0.85);
+            border-bottom: 1px solid var(--border);
+            transition: all .3s
+        }
+
+        nav .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.25rem;
+            font-weight: 800
+        }
+
+        .nav-brand svg {
+            width: 32px;
+            height: 32px
+        }
+
+        .nav-brand span {
+            background: linear-gradient(135deg, var(--indigo), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            align-items: center
+        }
+
+        .nav-links a {
+            color: var(--text2);
+            font-size: .88rem;
+            font-weight: 500
+        }
+
+        .nav-links a:hover {
+            color: var(--text)
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: .9rem;
+            transition: all .25s;
+            cursor: pointer;
+            border: none;
+            text-decoration: none
+        }
+
+        .btn-p {
+            background: linear-gradient(135deg, var(--indigo), var(--violet));
+            color: #fff;
+            box-shadow: 0 4px 24px rgba(99, 102, 241, 0.25)
+        }
+
+        .btn-p:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(99, 102, 241, 0.4);
+            color: #fff
+        }
+
+        .btn-s {
+            background: var(--card);
+            color: var(--text);
+            border: 1px solid var(--border)
+        }
+
+        .btn-s:hover {
+            border-color: var(--indigo);
+            color: #fff
+        }
+
+        .btn-sm {
+            padding: 8px 18px;
+            font-size: .82rem;
+            border-radius: 8px
+        }
+
+        /* ─── HERO ─── */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 0 80px;
+            overflow: hidden
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 25% 15%, rgba(99, 102, 241, 0.18), transparent 55%),
+                radial-gradient(ellipse at 75% 85%, rgba(139, 92, 246, 0.12), transparent 55%),
+                radial-gradient(ellipse at 50% 50%, rgba(34, 211, 238, 0.06), transparent 60%)
+        }
+
+        .hero-grid {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 64px 64px;
+            opacity: .25;
+            mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%)
+        }
+
+        .hero-content {
+            position: relative;
+            text-align: center;
+            max-width: 850px;
+            margin: 0 auto
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 18px;
+            background: rgba(99, 102, 241, 0.08);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 999px;
+            font-size: .78rem;
+            font-weight: 600;
+            color: var(--cyan);
+            margin-bottom: 28px;
+            backdrop-filter: blur(10px)
+        }
+
+        .hero-badge .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--emerald);
+            animation: pulse 2s infinite
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: .3
+            }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.4rem, 6vw, 4.2rem);
+            font-weight: 900;
+            line-height: 1.08;
+            margin-bottom: 24px
+        }
+
+        .hero h1 .grad {
+            background: linear-gradient(135deg, #fff 0%, var(--indigo) 40%, var(--cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text2);
+            max-width: 620px;
+            margin: 0 auto 36px;
+            line-height: 1.75
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 28px
+        }
+
+        .install-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 24px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: .85rem;
+            color: var(--cyan);
+            cursor: pointer;
+            transition: all .2s
+        }
+
+        .install-box:hover {
+            border-color: var(--indigo)
+        }
+
+        .install-box .pfx {
+            color: var(--text3)
+        }
+
+        /* ─── LOGO SVG ─── */
+        .fin-logo {
+            fill: none;
+            stroke: url(#finGrad);
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round
+        }
+
+        /* ─── STATS ─── */
+        .stats {
+            padding: 48px 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            background: rgba(0, 0, 0, 0.25)
+        }
+
+        .stats .container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            text-align: center
+        }
+
+        .stat-n {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--indigo), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent
+        }
+
+        .stat-l {
+            font-size: .82rem;
+            color: var(--text3);
+            margin-top: 4px;
+            font-weight: 500
+        }
+
+        /* ─── SECTION COMMON ─── */
+        section {
+            padding: 100px 0
+        }
+
+        .stag {
+            display: inline-flex;
+            padding: 5px 14px;
+            border-radius: 999px;
+            font-size: .72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 16px
+        }
+
+        .stag-indigo {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--indigo);
+            border: 1px solid rgba(99, 102, 241, 0.2)
+        }
+
+        .stag-cyan {
+            background: rgba(34, 211, 238, 0.08);
+            color: var(--cyan);
+            border: 1px solid rgba(34, 211, 238, 0.15)
+        }
+
+        .stag-emerald {
+            background: rgba(52, 211, 153, 0.08);
+            color: var(--emerald);
+            border: 1px solid rgba(52, 211, 153, 0.15)
+        }
+
+        .stag-rose {
+            background: rgba(244, 63, 94, 0.08);
+            color: var(--rose);
+            border: 1px solid rgba(244, 63, 94, 0.15)
+        }
+
+        .sh {
+            text-align: center;
+            margin-bottom: 64px
+        }
+
+        .sh h2 {
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 800;
+            margin-bottom: 14px;
+            line-height: 1.15
+        }
+
+        .sh p {
+            font-size: 1.05rem;
+            color: var(--text2);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7
+        }
+
+        /* ─── HOW IT WORKS — FLOWCHART ─── */
+        .flow-section {
+            background: var(--bg2);
+            overflow: hidden
+        }
+
+        .flow-wrapper {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto
+        }
+
+        .flow-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, transparent, var(--indigo), var(--violet), var(--cyan), var(--emerald), transparent);
+            transform: translateX(-50%);
+            opacity: .3
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 48px;
+            margin-bottom: 64px;
+            position: relative
+        }
+
+        .flow-step:nth-child(even) {
+            flex-direction: row-reverse
+        }
+
+        .flow-node {
+            flex: 0 0 50%;
+            position: relative
+        }
+
+        .flow-dot {
+            position: absolute;
+            top: 24px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 3px solid;
+            z-index: 2;
+            background: var(--bg2)
+        }
+
+        .flow-step:nth-child(odd) .flow-dot {
+            right: -34px
+        }
+
+        .flow-step:nth-child(even) .flow-dot {
+            left: -34px
+        }
+
+        .flow-card {
+            padding: 32px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            transition: all .4s;
+            position: relative;
+            overflow: hidden
+        }
+
+        .flow-card:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4)
+        }
+
+        .flow-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            opacity: 0;
+            transition: opacity .3s
+        }
+
+        .flow-card:hover::after {
+            opacity: 1
+        }
+
+        .flow-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            font-size: .85rem;
+            font-weight: 800;
+            margin-bottom: 14px
+        }
+
+        .flow-card h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px
+        }
+
+        .flow-card p {
+            font-size: .88rem;
+            color: var(--text2);
+            line-height: 1.7
+        }
+
+        .flow-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 14px
+        }
+
+        .flow-tag {
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: .7rem;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            color: var(--text2)
+        }
+
+        /* Flow colors */
+        .fc-indigo .flow-dot {
+            border-color: var(--indigo)
+        }
+
+        .fc-indigo .flow-num {
+            background: rgba(99, 102, 241, 0.12);
+            color: var(--indigo)
+        }
+
+        .fc-indigo .flow-card::after {
+            background: linear-gradient(90deg, var(--indigo), transparent)
+        }
+
+        .fc-violet .flow-dot {
+            border-color: var(--violet)
+        }
+
+        .fc-violet .flow-num {
+            background: rgba(139, 92, 246, 0.12);
+            color: var(--violet)
+        }
+
+        .fc-violet .flow-card::after {
+            background: linear-gradient(90deg, var(--violet), transparent)
+        }
+
+        .fc-cyan .flow-dot {
+            border-color: var(--cyan)
+        }
+
+        .fc-cyan .flow-num {
+            background: rgba(34, 211, 238, 0.12);
+            color: var(--cyan)
+        }
+
+        .fc-cyan .flow-card::after {
+            background: linear-gradient(90deg, var(--cyan), transparent)
+        }
+
+        .fc-emerald .flow-dot {
+            border-color: var(--emerald)
+        }
+
+        .fc-emerald .flow-num {
+            background: rgba(52, 211, 153, 0.12);
+            color: var(--emerald)
+        }
+
+        .fc-emerald .flow-card::after {
+            background: linear-gradient(90deg, var(--emerald), transparent)
+        }
+
+        .fc-amber .flow-dot {
+            border-color: var(--amber)
+        }
+
+        .fc-amber .flow-num {
+            background: rgba(251, 191, 36, 0.12);
+            color: var(--amber)
+        }
+
+        .fc-amber .flow-card::after {
+            background: linear-gradient(90deg, var(--amber), transparent)
+        }
+
+        .fc-rose .flow-dot {
+            border-color: var(--rose)
+        }
+
+        .fc-rose .flow-num {
+            background: rgba(244, 63, 94, 0.12);
+            color: var(--rose)
+        }
+
+        .fc-rose .flow-card::after {
+            background: linear-gradient(90deg, var(--rose), transparent)
+        }
+
+        /* ─── FEATURES ─── */
+        .feat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px
+        }
+
+        .feat {
+            padding: 28px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            transition: all .35s;
+            position: relative;
+            overflow: hidden
+        }
+
+        .feat:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3)
+        }
+
+        .feat::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--indigo), transparent);
+            opacity: 0;
+            transition: opacity .3s
+        }
+
+        .feat:hover::before {
+            opacity: 1
+        }
+
+        .feat-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+            margin-bottom: 16px
+        }
+
+        .feat h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 8px
+        }
+
+        .feat p {
+            font-size: .84rem;
+            color: var(--text2);
+            line-height: 1.65
+        }
+
+        /* ─── REAL-TIME VALUE ─── */
+        .value-section {
+            background: var(--bg2)
+        }
+
+        .value-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px
+        }
+
+        .value-card {
+            padding: 32px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            text-align: center;
+            transition: all .3s
+        }
+
+        .value-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(99, 102, 241, 0.2)
+        }
+
+        .value-icon {
+            font-size: 2.5rem;
+            margin-bottom: 16px
+        }
+
+        .value-card h3 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 4px
+        }
+
+        .value-highlight {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 8px
+        }
+
+        .value-card p {
+            font-size: .88rem;
+            color: var(--text2);
+            line-height: 1.6
+        }
+
+        /* ─── PROVIDERS ─── */
+        .prov-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px
+        }
+
+        .prov {
+            padding: 32px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            text-align: center;
+            transition: all .3s
+        }
+
+        .prov:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateY(-3px)
+        }
+
+        .prov-logo {
+            font-size: 2.5rem;
+            margin-bottom: 14px
+        }
+
+        .prov h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 4px
+        }
+
+        .prov-count {
+            font-size: .82rem;
+            color: var(--cyan);
+            font-weight: 600;
+            margin-bottom: 16px
+        }
+
+        .prov-list {
+            list-style: none;
+            text-align: left
+        }
+
+        .prov-list li {
+            font-size: .82rem;
+            color: var(--text2);
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        .prov-list li::before {
+            content: '✓';
+            color: var(--emerald);
+            font-weight: 700;
+            font-size: .72rem
+        }
+
+        /* ─── CODE ─── */
+        .code-section {
+            background: var(--bg)
+        }
+
+        .code-wrap {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: start
+        }
+
+        .code-info h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 12px
+        }
+
+        .code-info p {
+            color: var(--text2);
+            margin-bottom: 24px;
+            line-height: 1.7
+        }
+
+        .code-list {
+            list-style: none
+        }
+
+        .code-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            font-size: .9rem;
+            color: var(--text2)
+        }
+
+        .code-list li::before {
+            content: '→';
+            color: var(--indigo);
+            font-weight: 700
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .tab {
+            padding: 10px 20px;
+            font-size: .85rem;
+            font-weight: 500;
+            color: var(--text3);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all .2s
+        }
+
+        .tab.active {
+            color: var(--indigo);
+            border-bottom-color: var(--indigo)
+        }
+
+        .cblock {
+            background: rgba(0, 0, 0, 0.45);
+            border: 1px solid var(--border);
+            border-top: 0;
+            border-radius: 0 0 var(--r) var(--r);
+            padding: 24px;
+            overflow-x: auto;
+            display: none
+        }
+
+        .cblock.active {
+            display: block
+        }
+
+        .cblock pre {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .8rem;
+            line-height: 1.75;
+            color: var(--text)
+        }
+
+        .kw {
+            color: var(--purple)
+        }
+
+        .fn {
+            color: var(--cyan)
+        }
+
+        .str {
+            color: var(--emerald)
+        }
+
+        .cm {
+            color: var(--text3)
+        }
+
+        .op {
+            color: var(--amber)
+        }
+
+        /* ─── PRICING ─── */
+        .price-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px
+        }
+
+        .price {
+            padding: 36px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            position: relative;
+            transition: all .3s
+        }
+
+        .price:hover {
+            transform: translateY(-4px)
+        }
+
+        .price.hot {
+            border-color: var(--indigo);
+            box-shadow: 0 0 60px rgba(99, 102, 241, 0.12)
+        }
+
+        .price.hot::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 4px 16px;
+            background: linear-gradient(135deg, var(--indigo), var(--violet));
+            color: #fff;
+            font-size: .68rem;
+            font-weight: 700;
+            border-radius: 999px;
+            letter-spacing: 1px
+        }
+
+        .price-name {
+            font-size: .95rem;
+            font-weight: 600;
+            color: var(--text2);
+            margin-bottom: 8px
+        }
+
+        .price-amt {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 4px
+        }
+
+        .price-amt span {
+            font-size: .88rem;
+            font-weight: 400;
+            color: var(--text3)
+        }
+
+        .price-desc {
+            font-size: .84rem;
+            color: var(--text3);
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .price-list {
+            list-style: none;
+            margin-bottom: 32px
+        }
+
+        .price-list li {
+            font-size: .84rem;
+            color: var(--text2);
+            padding: 5px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        .price-list .y {
+            color: var(--emerald)
+        }
+
+        .price-list .n {
+            color: var(--text3);
+            opacity: .4
+        }
+
+        .pbtn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: .88rem;
+            transition: all .2s;
+            border: none;
+            cursor: pointer;
+            text-decoration: none
+        }
+
+        .pbtn-p {
+            background: linear-gradient(135deg, var(--indigo), var(--violet));
+            color: #fff
+        }
+
+        .pbtn-s {
+            background: var(--card);
+            color: var(--text);
+            border: 1px solid var(--border)
+        }
+
+        /* ─── CTA BANNER ─── */
+        .cta-section {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(34, 211, 238, 0.05));
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border)
+        }
+
+        .cta-inner {
+            text-align: center;
+            padding: 20px 0
+        }
+
+        .cta-inner h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 12px
+        }
+
+        .cta-inner p {
+            color: var(--text2);
+            margin-bottom: 28px;
+            font-size: 1.05rem
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            padding: 60px 0 30px;
+            border-top: 1px solid var(--border);
+            background: rgba(0, 0, 0, 0.3)
+        }
+
+        .foot-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px
+        }
+
+        .foot-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px
+        }
+
+        .foot-brand svg {
+            width: 28px;
+            height: 28px
+        }
+
+        .foot-brand span {
+            font-size: 1.3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--indigo), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent
+        }
+
+        .foot-desc {
+            color: var(--text3);
+            font-size: .85rem;
+            line-height: 1.6
+        }
+
+        .foot-col h4 {
+            font-size: .82rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text2);
+            margin-bottom: 14px
+        }
+
+        .foot-col a {
+            display: block;
+            color: var(--text3);
+            font-size: .84rem;
+            padding: 4px 0;
+            transition: color .2s
+        }
+
+        .foot-col a:hover {
+            color: var(--text)
+        }
+
+        .foot-bottom {
+            text-align: center;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            font-size: .78rem;
+            color: var(--text3)
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media(max-width:768px) {
+            .nav-links {
+                display: none
+            }
+
+            .stats .container,
+            .prov-grid,
+            .price-grid,
+            .value-grid {
+                grid-template-columns: 1fr
+            }
+
+            .code-wrap {
+                grid-template-columns: 1fr
+            }
+
+            .foot-grid {
+                grid-template-columns: 1fr
+            }
+
+            .flow-step,
+            .flow-step:nth-child(even) {
+                flex-direction: column;
+                gap: 24px
+            }
+
+            .flow-line {
+                display: none
+            }
+
+            .flow-dot {
+                display: none
+            }
+
+            .flow-node {
+                flex: 1
+            }
+        }
+
+        /* ─── ANIMATE ─── */
+        .anim {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: all .6s cubic-bezier(.4, 0, .2, 1)
+        }
+
+        .anim.vis {
+            opacity: 1;
+            transform: translateY(0)
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SHARK FIN SVG DEFS (used by nav + footer) -->
+    <svg style="position:absolute;width:0;height:0">
+        <defs>
+            <linearGradient id="finGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#6366f1" />
+                <stop offset="100%" stop-color="#22d3ee" />
+            </linearGradient>
+        </defs>
+    </svg>
+
+    <!-- NAV -->
+    <nav>
+        <div class="container">
+            <a href="#" class="nav-brand">
+                <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 4 C20 4, 22 18, 14 30 C14 30, 20 28, 26 30 C26 30, 24 20, 20 4Z" fill="url(#finGrad)"
+                        opacity="0.9" />
+                    <path d="M14 30 C14 30, 8 32, 6 34" stroke="url(#finGrad)" stroke-width="2" fill="none"
+                        stroke-linecap="round" />
+                    <path d="M26 30 C26 30, 32 32, 34 34" stroke="url(#finGrad)" stroke-width="2" fill="none"
+                        stroke-linecap="round" />
+                    <ellipse cx="20" cy="35" rx="16" ry="2" fill="url(#finGrad)" opacity="0.15" />
+                </svg>
+                <span>FinOps AI</span>
+            </a>
+            <div class="nav-links">
+                <a href="#how-it-works">How It Works</a>
+                <a href="#features">Features</a>
+                <a href="#providers">Providers</a>
+                <a href="#pricing">Pricing</a>
+                <a href="https://github.com/samvardhan03/FinopsAI" target="_blank">GitHub</a>
+                <a href="https://pypi.org/project/finops-ai/" target="_blank" class="btn btn-p btn-sm">Install →</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-grid"></div>
+        <div class="hero-content container">
+            <div class="hero-badge"><span class="dot"></span> v0.1.3 — Now Live on PyPI</div>
+            <h1><span class="grad">Stop Paying for Cloud Resources Nobody Uses</span></h1>
+            <p>FinOps AI connects to your Azure, AWS, and GCP accounts, automatically detects orphaned snapshots, zombie
+                VMs, idle IPs, and unattached disks — then uses machine learning to forecast how much money you're
+                burning. <strong>Average savings: 30%.</strong></p>
+            <div class="hero-actions">
+                <a href="https://pypi.org/project/finops-ai/" target="_blank" class="btn btn-p">Get Started Free →</a>
+                <a href="https://github.com/samvardhan03/FinopsAI" target="_blank" class="btn btn-s">⭐ Star on
+                    GitHub</a>
+            </div>
+            <div class="install-box"
+                onclick="navigator.clipboard.writeText('pip install finops-ai[all]');this.querySelector('.pfx').textContent='✓ copied!'">
+                <span class="pfx">$</span> pip install finops-ai[all]
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS -->
+    <div class="stats">
+        <div class="container">
+            <div>
+                <div class="stat-n">3</div>
+                <div class="stat-l">Cloud Providers</div>
+            </div>
+            <div>
+                <div class="stat-n">14+</div>
+                <div class="stat-l">Resource Types</div>
+            </div>
+            <div>
+                <div class="stat-n">30%</div>
+                <div class="stat-l">Average Savings</div>
+            </div>
+            <div>
+                <div class="stat-n">~2 min</div>
+                <div class="stat-l">Time to First Scan</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HOW IT WORKS — VISUAL FLOWCHART -->
+    <section id="how-it-works" class="flow-section">
+        <div class="container">
+            <div class="sh anim">
+                <div class="stag stag-cyan">How It Works</div>
+                <h2>From Cloud Chaos to Cost Clarity — in 6 Steps</h2>
+                <p>FinOps AI automates the entire FinOps lifecycle. Here's exactly what happens under the hood when you
+                    run a single command.</p>
+            </div>
+            <div class="flow-wrapper">
+                <div class="flow-line"></div>
+
+                <!-- Step 1 -->
+                <div class="flow-step fc-indigo anim">
+                    <div class="flow-node">
+                        <div class="flow-dot"></div>
+                        <div class="flow-card">
+                            <div class="flow-num">01</div>
+                            <h3>🔑 Secure Multi-Cloud Authentication</h3>
+                            <p>FinOps AI connects to your clouds using your existing credentials — Azure CLI, AWS IAM
+                                roles, or GCP service accounts. <strong>Zero passwords stored.</strong> It auto-detects
+                                your authentication method so setup takes seconds, not hours.</p>
+                            <div class="flow-tags"><span class="flow-tag">Azure AD</span><span class="flow-tag">AWS
+                                    STS</span><span class="flow-tag">GCP ADC</span><span class="flow-tag">Managed
+                                    Identity</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="flow-step fc-violet anim">
+                    <div class="flow-node">
+                        <div class="flow-dot"></div>
+                        <div class="flow-card">
+                            <div class="flow-num">02</div>
+                            <h3>🔍 Deep Infrastructure Scanning</h3>
+                            <p>The engine crawls through every subscription, region, and project — checking <strong>14+
+                                    resource types</strong> including snapshots, disks, VMs, IPs, NICs, load balancers,
+                                RDS instances, and storage buckets. Each resource is evaluated against multiple
+                                orphan-detection heuristics.</p>
+                            <div class="flow-tags"><span class="flow-tag">Snapshots</span><span
+                                    class="flow-tag">Disks</span><span class="flow-tag">VMs</span><span
+                                    class="flow-tag">Public IPs</span><span class="flow-tag">Load Balancers</span><span
+                                    class="flow-tag">RDS</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="flow-step fc-cyan anim">
+                    <div class="flow-node">
+                        <div class="flow-dot"></div>
+                        <div class="flow-card">
+                            <div class="flow-num">03</div>
+                            <h3>🧠 AI-Powered Anomaly Detection</h3>
+                            <p>Scanned resources flow into an <strong>Isolation Forest</strong> ML model that learns
+                                your infrastructure's normal patterns. It automatically flags statistical outliers —
+                                like a 5TB premium SSD sitting idle for 3 days — that humans would miss in a spreadsheet
+                                of 10,000 resources.</p>
+                            <div class="flow-tags"><span class="flow-tag">scikit-learn</span><span
+                                    class="flow-tag">Isolation Forest</span><span class="flow-tag">Outlier
+                                    Detection</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="flow-step fc-emerald anim">
+                    <div class="flow-node">
+                        <div class="flow-dot"></div>
+                        <div class="flow-card">
+                            <div class="flow-num">04</div>
+                            <h3>🛡️ Dependency Graph & Safety Check</h3>
+                            <p>Before recommending any deletion, the <strong>NetworkX</strong> dependency graph traces
+                                every relationship between resources. A "detached" IP that looks orphaned might actually
+                                be reserved by a load balancer. FinOps AI ensures you <strong>never delete something
+                                    still in use</strong>.</p>
+                            <div class="flow-tags"><span class="flow-tag">NetworkX</span><span class="flow-tag">DAG
+                                    Analysis</span><span class="flow-tag">Safe Deletion</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="flow-step fc-amber anim">
+                    <div class="flow-node">
+                        <div class="flow-dot"></div>
+                        <div class="flow-card">
+                            <div class="flow-num">05</div>
+                            <h3>📊 Cost Forecasting & Smart Recommendations</h3>
+                            <p>Historical cost data feeds into <strong>Meta's Prophet</strong> time-series engine to
+                                predict your cloud bill 30, 60, and 90 days out if waste isn't addressed. Each resource
+                                gets an effort/risk score so your team knows exactly <strong>what to fix first</strong>
+                                for maximum ROI.</p>
+                            <div class="flow-tags"><span class="flow-tag">Prophet</span><span
+                                    class="flow-tag">Forecasting</span><span class="flow-tag">Risk Scoring</span><span
+                                    class="flow-tag">ROI Ranking</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 6 -->
+                <div class="flow-step fc-rose anim">
+                    <div class="flow-node">
+                        <div class="flow-dot"></div>
+                        <div class="flow-card">
+                            <div class="flow-num">06</div>
+                            <h3>📄 Reports, Alerts & Action</h3>
+                            <p>Results land in your hands via a <strong>beautiful dark-themed HTML dashboard</strong>,
+                                JSON/CSV exports for pipelines, or real-time <strong>Slack notifications</strong> that
+                                ping your engineering channel. Governance policies auto-trigger approval workflows or
+                                instant remediation.</p>
+                            <div class="flow-tags"><span class="flow-tag">HTML Dashboard</span><span
+                                    class="flow-tag">Slack Alerts</span><span class="flow-tag">JSON/CSV</span><span
+                                    class="flow-tag">YAML Policies</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- REAL-TIME VALUE PROPOSITION -->
+    <section class="value-section">
+        <div class="container">
+            <div class="sh anim">
+                <div class="stag stag-emerald">Why FinOps AI</div>
+                <h2>Real-Time Impact on Your Bottom Line</h2>
+                <p>Cloud waste accumulates silently. FinOps AI catches it before it hits your monthly invoice.</p>
+            </div>
+            <div class="value-grid">
+                <div class="value-card anim">
+                    <div class="value-icon">💸</div>
+                    <div class="value-highlight" style="color:var(--emerald)">$127K</div>
+                    <h3>Average Annual Savings</h3>
+                    <p>For a mid-size company running 500+ cloud resources across two providers, FinOps AI typically
+                        uncovers six-figure waste in the first scan.</p>
+                </div>
+                <div class="value-card anim">
+                    <div class="value-icon">⚡</div>
+                    <div class="value-highlight" style="color:var(--cyan)">2 min</div>
+                    <h3>Time to First Insight</h3>
+                    <p>Install, authenticate, scan. No complex setup wizards, no agents to deploy, no infrastructure
+                        changes. Three commands and you see waste in real time.</p>
+                </div>
+                <div class="value-card anim">
+                    <div class="value-icon">🔒</div>
+                    <div class="value-highlight" style="color:var(--indigo)">0</div>
+                    <h3>False Positive Deletions</h3>
+                    <p>The dependency graph ensures every resource marked for deletion is truly orphaned. No accidental
+                        outages, no angry 3am pages from prod.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features">
+        <div class="container">
+            <div class="sh anim">
+                <div class="stag stag-indigo">Platform Features</div>
+                <h2>Everything You Need to Eliminate Cloud Waste</h2>
+                <p>From automated scanning to AI-powered forecasting — enterprise-grade tooling for multi-cloud cost
+                    optimization.</p>
+            </div>
+            <div class="feat-grid">
+                <div class="feat anim">
+                    <div class="feat-icon" style="background:rgba(99,102,241,0.12);color:var(--indigo)">☁️</div>
+                    <h3>Multi-Cloud Scanning</h3>
+                    <p>Unified interface for Azure, AWS, and GCP. One command scans all your environments
+                        simultaneously.</p>
+                </div>
+                <div class="feat anim">
+                    <div class="feat-icon" style="background:rgba(168,85,247,0.12);color:var(--purple)">🧠</div>
+                    <h3>AI/ML Engine</h3>
+                    <p>Isolation Forest anomaly detection spots unusual spending. Prophet forecasts costs with
+                        confidence bands.</p>
+                </div>
+                <div class="feat anim">
+                    <div class="feat-icon" style="background:rgba(52,211,153,0.12);color:var(--emerald)">🛡️</div>
+                    <h3>Policy Engine</h3>
+                    <p>YAML-driven governance with custom conditions, approval workflows, and automated enforcement.</p>
+                </div>
+                <div class="feat anim">
+                    <div class="feat-icon" style="background:rgba(34,211,238,0.12);color:var(--cyan)">📊</div>
+                    <h3>Smart Recommendations</h3>
+                    <p>Prioritized, actionable insights with effort/risk ratings. Know exactly what to fix first.</p>
+                </div>
+                <div class="feat anim">
+                    <div class="feat-icon" style="background:rgba(236,72,153,0.12);color:var(--pink)">🔗</div>
+                    <h3>Dependency Graph</h3>
+                    <p>NetworkX-powered resource dependency analysis ensures safe deletion — never remove resources in
+                        active use.</p>
+                </div>
+                <div class="feat anim">
+                    <div class="feat-icon" style="background:rgba(59,130,246,0.12);color:var(--blue)">📄</div>
+                    <h3>Rich Reports</h3>
+                    <p>Beautiful dark-themed HTML dashboards, JSON, CSV exports, and real-time Slack notifications.</p>
+                </div>
+                <div class="feat anim">
+                    <div class="feat-icon" style="background:rgba(74,222,128,0.12);color:#4ade80">⌨️</div>
+                    <h3>Beautiful CLI</h3>
+                    <p>Click + Rich powered terminal with color-coded output, live progress bars, and formatted tables.
+                    </p>
+                </div>
+                <div class="feat anim">
+                    <div class="feat-icon" style="background:rgba(251,191,36,0.12);color:var(--amber)">⚡</div>
+                    <h3>Python SDK</h3>
+                    <p>Full programmatic API. Import any manager, authenticate, and integrate into your automation
+                        pipelines.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROVIDERS -->
+    <section id="providers" style="background:var(--bg2)">
+        <div class="container">
+            <div class="sh anim">
+                <div class="stag stag-cyan">Cloud Providers</div>
+                <h2>One Platform, Every Major Cloud</h2>
+                <p>Deep integration with 14+ resource types across Azure, AWS, and GCP.</p>
+            </div>
+            <div class="prov-grid">
+                <div class="prov anim">
+                    <div class="prov-logo">🔷</div>
+                    <h3>Microsoft Azure</h3>
+                    <div class="prov-count">7 Resource Types</div>
+                    <ul class="prov-list">
+                        <li>Orphaned Snapshots</li>
+                        <li>Unattached Managed Disks</li>
+                        <li>Unused Public IPs</li>
+                        <li>Zombie VMs</li>
+                        <li>Idle Storage Containers</li>
+                        <li>Empty App Service Plans</li>
+                        <li>Empty Resource Groups</li>
+                    </ul>
+                </div>
+                <div class="prov anim">
+                    <div class="prov-logo">🟠</div>
+                    <h3>Amazon Web Services</h3>
+                    <div class="prov-count">4 Resource Types</div>
+                    <ul class="prov-list">
+                        <li>Stopped EC2 Instances</li>
+                        <li>Unattached EBS Volumes</li>
+                        <li>Orphaned EBS Snapshots</li>
+                        <li>Unassociated Elastic IPs</li>
+                        <li>Idle Load Balancers</li>
+                        <li>Orphaned RDS Snapshots</li>
+                    </ul>
+                </div>
+                <div class="prov anim">
+                    <div class="prov-logo">🔴</div>
+                    <h3>Google Cloud Platform</h3>
+                    <div class="prov-count">3 Resource Types</div>
+                    <ul class="prov-list">
+                        <li>Orphaned Snapshots</li>
+                        <li>Unattached Persistent Disks</li>
+                        <li>Stopped VMs</li>
+                        <li>Reserved Static IPs</li>
+                        <li>Empty Storage Buckets</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CODE DEMO -->
+    <section class="code-section">
+        <div class="container">
+            <div class="code-wrap">
+                <div class="code-info anim">
+                    <div class="stag stag-indigo">Developer Experience</div>
+                    <h3>Built for Engineers, Loved by Finance</h3>
+                    <p>Whether you prefer the CLI, Python SDK, or YAML policies — FinOps AI fits into your existing
+                        workflow seamlessly.</p>
+                    <ul class="code-list">
+                        <li>Scan with a single CLI command</li>
+                        <li>Full Python SDK for automation pipelines</li>
+                        <li>YAML-driven governance policies</li>
+                        <li>Export to JSON, CSV, HTML, or Slack</li>
+                        <li>Cron-compatible for scheduled scans</li>
+                    </ul>
+                </div>
+                <div class="anim">
+                    <div class="tabs">
+                        <div class="tab active" onclick="showTab(0)">CLI</div>
+                        <div class="tab" onclick="showTab(1)">Python</div>
+                        <div class="tab" onclick="showTab(2)">Config</div>
+                    </div>
+                    <div class="cblock active">
+                        <pre><span class="cm"># Install with all providers + ML</span>
+<span class="fn">$</span> pip install finops-ai<span class="op">[</span>all<span class="op">]</span>
+
+<span class="cm"># Generate config</span>
+<span class="fn">$</span> finops-ai init
+
+<span class="cm"># Scan Azure</span>
+<span class="fn">$</span> finops-ai scan --provider azure
+
+<span class="cm"># Scan everything with HTML report</span>
+<span class="fn">$</span> finops-ai scan --provider all \
+    --output html --report dashboard.html</pre>
+                    </div>
+                    <div class="cblock">
+                        <pre><span class="kw">from</span> finops_ai.core.auth_manager <span class="kw">import</span> <span class="fn">AuthManager</span>
+<span class="kw">from</span> finops_ai.providers.azure.snapshot_manager \
+    <span class="kw">import</span> <span class="fn">AzureSnapshotManager</span>
+
+<span class="cm"># Authenticate and scan</span>
+credential = <span class="fn">AuthManager</span>.get_azure_credential()
+manager = <span class="fn">AzureSnapshotManager</span>(credential)
+result = manager.<span class="fn">scan</span>()
+
+<span class="kw">print</span>(<span class="str">f"Found </span>{result.total_count}<span class="str"> orphans"</span>)
+<span class="kw">print</span>(<span class="str">f"Savings: $</span>{result.total_monthly_cost:.2f}<span class="str">/mo"</span>)</pre>
+                    </div>
+                    <div class="cblock">
+                        <pre><span class="cm"># finops-ai.yaml</span>
+<span class="fn">providers</span>:
+  <span class="fn">azure</span>:
+    <span class="fn">enabled</span>: <span class="str">true</span>
+    <span class="fn">auth</span>:
+      <span class="fn">method</span>: <span class="str">cli</span>
+  <span class="fn">aws</span>:
+    <span class="fn">enabled</span>: <span class="str">true</span>
+    <span class="fn">regions</span>: <span class="op">[</span><span class="str">us-east-1</span><span class="op">]</span>
+
+<span class="fn">ml</span>:
+  <span class="fn">enabled</span>: <span class="str">true</span>
+  <span class="fn">anomaly_detection</span>: <span class="str">true</span>
+  <span class="fn">cost_forecasting</span>: <span class="str">true</span></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING -->
+    <section id="pricing" style="background:var(--bg2)">
+        <div class="container">
+            <div class="sh anim">
+                <div class="stag stag-rose">Pricing</div>
+                <h2>Start Free, Scale As You Grow</h2>
+                <p>Open-source core with premium features for teams that need real-time monitoring and automation.</p>
+            </div>
+            <div class="price-grid">
+                <div class="price anim">
+                    <div class="price-name">Free / Open Source</div>
+                    <div class="price-amt">$0 <span>/ forever</span></div>
+                    <div class="price-desc">For individual developers and small teams.</div>
+                    <ul class="price-list">
+                        <li><span class="y">✓</span> Multi-cloud scanning</li>
+                        <li><span class="y">✓</span> 14+ resource types</li>
+                        <li><span class="y">✓</span> CLI + Python SDK</li>
+                        <li><span class="y">✓</span> JSON, CSV, HTML reports</li>
+                        <li><span class="y">✓</span> Basic anomaly detection</li>
+                        <li><span class="y">✓</span> Dependency graph</li>
+                        <li><span class="n">✗</span> Real-time monitoring</li>
+                        <li><span class="n">✗</span> Team dashboards</li>
+                    </ul>
+                    <a href="https://pypi.org/project/finops-ai/" target="_blank" class="pbtn pbtn-s">Install Free →</a>
+                </div>
+                <div class="price hot anim">
+                    <div class="price-name">Pro</div>
+                    <div class="price-amt">$49 <span>/ month</span></div>
+                    <div class="price-desc">For teams that want real-time insights and alerts.</div>
+                    <ul class="price-list">
+                        <li><span class="y">✓</span> Everything in Free</li>
+                        <li><span class="y">✓</span> Real-time cost monitoring</li>
+                        <li><span class="y">✓</span> Slack & Teams alerts</li>
+                        <li><span class="y">✓</span> Advanced Prophet forecasting</li>
+                        <li><span class="y">✓</span> Custom policy templates</li>
+                        <li><span class="y">✓</span> Scheduled scans (cron)</li>
+                        <li><span class="y">✓</span> Team dashboard (5 seats)</li>
+                        <li><span class="n">✗</span> SSO / SAML</li>
+                    </ul>
+                    <a href="#" class="pbtn pbtn-p">Coming Soon</a>
+                </div>
+                <div class="price anim">
+                    <div class="price-name">Enterprise</div>
+                    <div class="price-amt">Custom</div>
+                    <div class="price-desc">For organizations with complex multi-cloud estates.</div>
+                    <ul class="price-list">
+                        <li><span class="y">✓</span> Everything in Pro</li>
+                        <li><span class="y">✓</span> SSO / SAML auth</li>
+                        <li><span class="y">✓</span> Unlimited seats</li>
+                        <li><span class="y">✓</span> Custom integrations</li>
+                        <li><span class="y">✓</span> On-premise deployment</li>
+                        <li><span class="y">✓</span> 99.9% SLA guarantee</li>
+                        <li><span class="y">✓</span> Dedicated support</li>
+                        <li><span class="y">✓</span> SOC2 compliance reports</li>
+                    </ul>
+                    <a href="mailto:samvardhan03@gmail.com" class="pbtn pbtn-s">Contact Sales →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-inner anim">
+                <h2>Ready to Stop Burning Cloud Money?</h2>
+                <p>Join hundreds of engineers who already trust FinOps AI to optimize their multi-cloud spend.</p>
+                <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+                    <a href="https://pypi.org/project/finops-ai/" target="_blank" class="btn btn-p">pip install
+                        finops-ai →</a>
+                    <a href="https://github.com/samvardhan03/FinopsAI" target="_blank" class="btn btn-s">View on
+                        GitHub</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="foot-grid">
+                <div>
+                    <div class="foot-brand">
+                        <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 4 C20 4, 22 18, 14 30 C14 30, 20 28, 26 30 C26 30, 24 20, 20 4Z"
+                                fill="url(#finGrad)" opacity="0.9" />
+                            <path d="M14 30 C14 30, 8 32, 6 34" stroke="url(#finGrad)" stroke-width="2" fill="none"
+                                stroke-linecap="round" />
+                            <path d="M26 30 C26 30, 32 32, 34 34" stroke="url(#finGrad)" stroke-width="2" fill="none"
+                                stroke-linecap="round" />
+                        </svg>
+                        <span>FinOps AI</span>
+                    </div>
+                    <p class="foot-desc">Enterprise-grade AI-powered multi-cloud cost optimization platform.<br>Built by
+                        Samvardhan Singh.</p>
+                </div>
+                <div class="foot-col">
+                    <h4>Product</h4><a href="#how-it-works">How It Works</a><a href="#features">Features</a><a
+                        href="#providers">Providers</a><a href="#pricing">Pricing</a>
+                </div>
+                <div class="foot-col">
+                    <h4>Developers</h4><a href="https://github.com/samvardhan03/FinopsAI" target="_blank">GitHub</a><a
+                        href="https://pypi.org/project/finops-ai/" target="_blank">PyPI</a><a
+                        href="https://github.com/samvardhan03/FinopsAI#readme" target="_blank">Documentation</a><a
+                        href="https://github.com/samvardhan03/FinopsAI/issues" target="_blank">Issues</a>
+                </div>
+                <div class="foot-col">
+                    <h4>Community</h4><a href="https://github.com/samvardhan03/FinopsAI"
+                        target="_blank">Contribute</a><a
+                        href="https://github.com/samvardhan03/FinopsAI/blob/main/LICENSE" target="_blank">License
+                        (Apache 2.0)</a>
+                </div>
+            </div>
+            <div class="foot-bottom">&copy; 2026 FinOps AI — Built with 🦈 by Samvardhan Singh</div>
+        </div>
+    </footer>
+
+    <script>
+        function showTab(i) { document.querySelectorAll('.tab').forEach((t, j) => { t.classList.toggle('active', j === i) }); document.querySelectorAll('.cblock').forEach((b, j) => { b.classList.toggle('active', j === i) }) }
+        const obs = new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target) } }) }, { threshold: 0.1 });
+        document.querySelectorAll('.anim').forEach(el => obs.observe(el));
+    </script>
+</body>
+
+</html>
