@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import logging
 from datetime import datetime, timezone
-from typing import Any, List, Optional
+from typing import Any, Dict, List, Optional
 
 from finops_ai.core.base_manager import (
     BaseResourceManager,
@@ -25,13 +25,19 @@ logger = logging.getLogger("finops-ai.gcp.storage")
 class GCPStorageManager(BaseResourceManager):
     """Finds idle/empty GCP Cloud Storage buckets."""
 
-    def __init__(self, project_id: str, credentials: Any = None) -> None:
+    def __init__(
+        self,
+        project_id: str,
+        credentials: Any = None,
+        resource_labels: Optional[Dict[str, str]] = None,
+    ) -> None:
         try:
             from google.cloud import storage
         except ImportError:
             raise ImportError("GCP SDK not installed. Install with: pip install finops-ai[gcp]")
 
         self.project_id = project_id
+        self.resource_labels = resource_labels or {}
         self._client = storage.Client(project=project_id, credentials=credentials)
 
     @property
@@ -58,6 +64,14 @@ class GCPStorageManager(BaseResourceManager):
 
                     if not blobs:
                         labels = dict(getattr(bucket, "labels", {}) or {})
+
+                        # Apply resource label filter
+                        if self.resource_labels and not all(
+                            labels.get(k) == v
+                            for k, v in self.resource_labels.items()
+                        ):
+                            continue
+
                         created = getattr(bucket, "time_created", None)
                         age_days = 0
                         created_str = ""

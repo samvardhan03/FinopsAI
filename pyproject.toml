@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "finops-ai"
-version = "0.1.3"
-description = "AI-powered multi-cloud cost optimization for humans"
+version = "0.1.4"
+description = "Enterprise-grade multi-cloud cost optimization platform"
 readme = "README.md"
 license = {text = "Apache-2.0"}
 requires-python = ">=3.9"
@@ -59,6 +59,8 @@ gcp = [
     "google-cloud-storage>=2.10.0",
     "google-cloud-monitoring>=2.16.0",
     "google-auth>=2.22.0",
+    "google-cloud-resource-manager>=1.10.0",
+    "google-cloud-billing>=1.11.0",
 ]
 ml = [
     "scikit-learn>=1.3.0",
@@ -66,8 +68,12 @@ ml = [
     "numpy>=1.24.0",
     "prophet>=1.1.4",
 ]
+rag = [
+    "langchain-core>=0.1.0",
+    "numpy>=1.24.0",
+]
 all = [
-    "finops-ai[azure,aws,gcp,ml]",
+    "finops-ai[azure,aws,gcp,ml,rag]",
 ]
 dev = [
     "pytest>=7.4.0",
@@ -83,7 +89,7 @@ dev = [
 finops-ai = "finops_ai.cli:cli"
 
 [project.urls]
-Homepage = "https://github.com/samvardhan03/FinopsAI"
+Homepage = "https://samvardhan03.github.io/FinopsAI"
 Documentation = "https://github.com/samvardhan03/FinopsAI#readme"
 Repository = "https://github.com/samvardhan03/FinopsAI"
 Issues = "https://github.com/samvardhan03/FinopsAI/issues"

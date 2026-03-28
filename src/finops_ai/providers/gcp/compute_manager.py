@@ -5,7 +5,7 @@ GCP Compute Manager — find orphaned disks, snapshots, and stopped VMs.
 from __future__ import annotations
 
 import logging
-from typing import Any, List, Optional
+from typing import Any, Dict, List, Optional
 
 from finops_ai.core.base_manager import (
     BaseResourceManager,
@@ -23,7 +23,13 @@ logger = logging.getLogger("finops-ai.gcp.compute")
 class GCPComputeManager(BaseResourceManager):
     """Finds orphaned disks, snapshots, and stopped VMs in Google Cloud."""
 
-    def __init__(self, project_id: str, credentials: Any = None, zones: Optional[List[str]] = None) -> None:
+    def __init__(
+        self,
+        project_id: str,
+        credentials: Any = None,
+        zones: Optional[List[str]] = None,
+        resource_labels: Optional[Dict[str, str]] = None,
+    ) -> None:
         try:
             from google.cloud import compute_v1
         except ImportError:
@@ -32,6 +38,7 @@ class GCPComputeManager(BaseResourceManager):
         self.project_id = project_id
         self.credentials = credentials
         self.zones = zones or []
+        self.resource_labels = resource_labels or {}
         self._disks_client = compute_v1.DisksClient(credentials=credentials)
         self._snapshots_client = compute_v1.SnapshotsClient(credentials=credentials)
         self._instances_client = compute_v1.InstancesClient(credentials=credentials)
@@ -77,6 +84,14 @@ class GCPComputeManager(BaseResourceManager):
                         cost = CostCalculator.gcp_snapshot(size_gb)
 
                         labels = dict(getattr(snap, "labels", {}) or {})
+
+                        # Apply resource label filter
+                        if self.resource_labels and not all(
+                            labels.get(k) == v
+                            for k, v in self.resource_labels.items()
+                        ):
+                            continue
+
                         resources.append(OrphanedResource(
                             provider=CloudProvider.GCP,
                             resource_type="snapshot",
@@ -110,6 +125,14 @@ class GCPComputeManager(BaseResourceManager):
                             cost = CostCalculator.gcp_disk(size_gb, disk_type)
 
                             labels = dict(getattr(disk, "labels", {}) or {})
+
+                            # Apply resource label filter
+                            if self.resource_labels and not all(
+                                labels.get(k) == v
+                                for k, v in self.resource_labels.items()
+                            ):
+                                continue
+
                             resources.append(OrphanedResource(
                                 provider=CloudProvider.GCP,
                                 resource_type="disk",
@@ -140,6 +163,14 @@ class GCPComputeManager(BaseResourceManager):
                         status = getattr(vm, "status", "")
                         if status == "TERMINATED":
                             labels = dict(getattr(vm, "labels", {}) or {})
+
+                            # Apply resource label filter
+                            if self.resource_labels and not all(
+                                labels.get(k) == v
+                                for k, v in self.resource_labels.items()
+                            ):
+                                continue
+
                             resources.append(OrphanedResource(
                                 provider=CloudProvider.GCP,
                                 resource_type="vm",

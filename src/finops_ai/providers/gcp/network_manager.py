@@ -5,7 +5,7 @@ GCP Network Manager — find unused static IPs and idle forwarding rules.
 from __future__ import annotations
 
 import logging
-from typing import Any, List, Optional
+from typing import Any, Dict, List, Optional
 
 from finops_ai.core.base_manager import (
     BaseResourceManager,
@@ -23,7 +23,13 @@ logger = logging.getLogger("finops-ai.gcp.network")
 class GCPNetworkManager(BaseResourceManager):
     """Finds unused GCP network resources: static IPs, idle forwarding rules."""
 
-    def __init__(self, project_id: str, credentials: Any = None, regions: Optional[List[str]] = None) -> None:
+    def __init__(
+        self,
+        project_id: str,
+        credentials: Any = None,
+        regions: Optional[List[str]] = None,
+        resource_labels: Optional[Dict[str, str]] = None,
+    ) -> None:
         try:
             from google.cloud import compute_v1
         except ImportError:
@@ -32,6 +38,7 @@ class GCPNetworkManager(BaseResourceManager):
         self.project_id = project_id
         self.credentials = credentials
         self.regions = regions or []
+        self.resource_labels = resource_labels or {}
         self._addresses_client = compute_v1.AddressesClient(credentials=credentials)
         self._global_addresses_client = compute_v1.GlobalAddressesClient(credentials=credentials)
         self._regions_client = compute_v1.RegionsClient(credentials=credentials)
@@ -64,6 +71,14 @@ class GCPNetworkManager(BaseResourceManager):
                         status = getattr(addr, "status", "")
                         if status == "RESERVED":  # Not IN_USE
                             labels = dict(getattr(addr, "labels", {}) or {})
+
+                            # Apply resource label filter
+                            if self.resource_labels and not all(
+                                labels.get(k) == v
+                                for k, v in self.resource_labels.items()
+                            ):
+                                continue
+
                             resources.append(OrphanedResource(
                                 provider=CloudProvider.GCP,
                                 resource_type="static_ip",
@@ -90,6 +105,14 @@ class GCPNetworkManager(BaseResourceManager):
                 status = getattr(addr, "status", "")
                 if status == "RESERVED":
                     labels = dict(getattr(addr, "labels", {}) or {})
+
+                    # Apply resource label filter
+                    if self.resource_labels and not all(
+                        labels.get(k) == v
+                        for k, v in self.resource_labels.items()
+                    ):
+                        continue
+
                     resources.append(OrphanedResource(
                         provider=CloudProvider.GCP,
                         resource_type="static_ip",

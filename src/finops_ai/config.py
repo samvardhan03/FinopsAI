@@ -43,9 +43,25 @@ class AWSAuthConfig(BaseModel):
 class GCPAuthConfig(BaseModel):
     """GCP authentication configuration."""
 
-    project_id: Optional[str] = Field(default=None, description="GCP project ID")
+    project_id: Optional[str] = Field(default=None, description="GCP project ID (used when scope_type='project')")
+    scope_type: str = Field(
+        default="project",
+        description="Scope type: 'project', 'folder', or 'billing_account'",
+    )
+    scope_id: Optional[str] = Field(
+        default=None,
+        description=(
+            "Scope identifier. For 'project' scope this defaults to project_id. "
+            "For 'folder' scope this is the folder numeric ID. "
+            "For 'billing_account' scope this is the billing account ID."
+        ),
+    )
     credentials_file: Optional[str] = Field(default=None, description="Path to service account JSON")
     zones: List[str] = Field(default_factory=lambda: ["us-central1-a"], description="Zones to scan")
+    resource_labels: Dict[str, str] = Field(
+        default_factory=dict,
+        description="Optional labels to filter resources/projects (e.g., {'env': 'staging'})",
+    )
 
 
 # ── Provider Config ────────────────────────────────────────────────────────────
